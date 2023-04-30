@@ -31,7 +31,7 @@ i5-7600K CPU @ 3.80GHz
 i5-7600K CPU @ 3.80GHz  
 
 #### Without IMEI
-100000 requests in 3.1459460258483887 sec
-31786.940773414037 requests pr sec
+100000 requests in 3.1459460258483887 sec  
+31786.940773414037 requests pr sec  
 i5-7600K CPU @ 3.80GHz  
 
