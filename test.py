@@ -6,16 +6,23 @@ data = "000000000000003608010000016B40D8EA3001289EBEA2512FA692000000000000000105
 data = imei+data
 
 
+numberOfTimes = 100000
+startNumber = 1
+endNumber = startNumber + numberOfTimes
+startTime = time.time()
+lastStopTime = time.time()
 
-starttime = time.time()
-
-for x in range(1,1000001):
+for x in range(startNumber,endNumber):
 	decode = Decode(data)
 	if not decode.error:
-		stoptime = time.time()
-		timeused = stoptime - starttime
-		print(str(x)+': Done in '+ str(timeused)+' sec')
+		json = decode.getJson()
+		lastStopTime = time.time()
 
-# 999999: Done in 277.8946976661682
-# 3598,468808255115 pr sec
+timePassed = lastStopTime - startTime
+requestsPrSec = numberOfTimes / timePassed
+print(f"{numberOfTimes} requests in {timePassed} sec")
+print(f"{requestsPrSec} requests pr sec")
+
+# 1000000 requests in 36.57034349441528 sec
+# 27344.561315173636 requests pr sec
 # i5-7600K CPU @ 3.80GHz  

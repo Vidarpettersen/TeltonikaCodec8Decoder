@@ -1,5 +1,5 @@
 # Teltonika Codec 8 Decoder
-A decoder for the Codec8 packets sendt from Teltonika devices.
+A decoder for the Codec8 packets over TCP sendt from Teltonika devices.
 
 #### Imei hex format
 ```

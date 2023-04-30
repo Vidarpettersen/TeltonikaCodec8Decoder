@@ -132,8 +132,8 @@ class Decode:
 		first = True
 
 		json = '{'
-		json += '"imei": "'+self.imei+'",'
-		json += '"dataCount": "'+str(self.noOfData)+'",'
+		json += f'"imei": "{self.imei}",'
+		json += f'"dataCount": "{str(self.noOfData)}",'
 		json += '"data":['
 		for avl in self.avlDataPackets:
 			if first:
@@ -141,13 +141,13 @@ class Decode:
 			else:
 				json += ','
 			json += '{'
-			json += '"ts": "'+avl.utcTimeMs+'",'
-			json += '"lat": "'+avl.lat+'",'
-			json += '"lng": "'+avl.lng+'",'
-			json += '"sp": "'+avl.speed+'",'
-			json += '"ang": "'+avl.angle+'",'
-			json += '"sat": "'+avl.visSat+'",'
-			json += '"alt": "'+avl.visSat+'",'
+			json += f'"ts": "{avl.utcTimeMs}",'
+			json += f'"lat": "{avl.lat}",'
+			json += f'"lng": "{avl.lng}",'
+			json += f'"sp":  "{avl.speed}",'
+			json += f'"ang": "{avl.angle}",'
+			json += f'"sat": "{avl.visSat}",'
+			json += f'"alt": "{avl.visSat}",'
 			json += '"elements": ['
 			first = True
 			for element in avl.elements:
@@ -156,8 +156,8 @@ class Decode:
 				else:
 					json += ','
 				json += '{'
-				json += '"id": "'+str(element.IOID)+'",'
-				json += '"value": "'+str(element.value)+'"'
+				json += f'"id": "{str(element.IOID)}",'
+				json += f'"value": "{str(element.value)}"'
 				json += '}'
 			json += ']'
 			json += '}'
@@ -165,7 +165,4 @@ class Decode:
 		return json
 
 def toInt(data):
-	return int(''.join(map(str, data)), 32)
-
-def toStr(data):
-	return str(''.join(map(str, data)))
+	return int(''.join(data), 16)
