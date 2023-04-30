@@ -23,6 +23,6 @@ requestsPrSec = numberOfTimes / timePassed
 print(f"{numberOfTimes} requests in {timePassed} sec")
 print(f"{requestsPrSec} requests pr sec")
 
-# 1000000 requests in 36.57034349441528 sec
-# 27344.561315173636 requests pr sec
+# 100000 requests in 3.410489559173584 sec
+# 29321.30366182138 requests pr sec
 # i5-7600K CPU @ 3.80GHz  

@@ -14,12 +14,12 @@ A decoder for the Codec8 packets over TCP sendt from Teltonika devices.
 ## Testing results
 
 #### Only decoding
-100000 requests in 3.1094069480895996 sec
-32160.473578873098 requests pr sec
+100000 requests in 3.1094069480895996 sec  
+32160.473578873098 requests pr sec  
 i5-7600K CPU @ 3.80GHz  
 
 #### With generating json
-100000 requests in 3.6996185779571533 sec
-27029.81345044974 requests pr sec
+100000 requests in 3.410489559173584 sec  
+29321.30366182138 requests pr sec  
 i5-7600K CPU @ 3.80GHz  
 

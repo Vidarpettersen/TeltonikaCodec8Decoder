@@ -1,45 +1,46 @@
 import codecs
 import struct
 from math import ceil
+from dataclasses import dataclass, field
 
+@dataclass(slots=True)
 class AvlData:
-	def __init__(self):
-		self.utcTimeMs = 0
-		self.utcTime = 0
-		self.priority = 0
-		self.lat = 0
-		self.lng = 0
-		self.altitude = 0
-		self.angle = 0
-		self.visSat = 0
-		self.speed = 0
-		self.eventID = 0
-		self.nTotal = 0
-		self.elements = [] 
+	utcTimeMs: str=""
+	utcTime: str=""
+	priority: str=""
+	lat: str=""
+	lng: str=""
+	altitude: str=""
+	angle: str=""
+	visSat: str=""
+	speed: str=""
+	eventID: str=""
+	nTotal: str=""
+	elements: list=field(default_factory=list)
 
+@dataclass(slots=True)
 class Element:
-	def __init__(self):
-		self.IOID = 0
-		self.value = 0
+	ioid: str=""
+	value: str=""
 
+@dataclass(slots=True)
 class Decode:
-	def __init__(self, data):
-		# Store the data for later use
-		self.data = data
-		self.json = ""
-		self.error = ""
-		self.bytes = []
+	data: str
+	json: str = ""
+	error: str = ""
+	bytes: list=field(default_factory=list)
+	imei: str = ""
+	codecID: str = ""
+	noOfData: str = ""
+	avlDataPacketFailed: str = ""
+	avlDataPackets: list=field(default_factory=list)
+	response: str = ""
 
-		# Contents of the data header
-		self.imei = 0
-		self.codecID = 0
-		self.noOfData = 0
-		self.avlDataPacketFailed = 0
-		self.avlDataPackets = []
-		self.response = []
+	def __post_init__(self):
 
 		# Create byte array from hex string
 		self.getBytes()
+
 		# Start the decode prossess
 		try:
 			self.decode()
@@ -73,12 +74,12 @@ class Decode:
 			avlData = AvlData()
 
 			############################
-			avlData.utcTimeMs = toInt(self.bytes[nextByte:][:8])
-			avlData.utcTime = str(avlData.utcTimeMs / 1000)
-			avlData.utcTimeMs = str(avlData.utcTimeMs)
+			utcTimeMs = toInt(self.bytes[nextByte:][:8])
+			avlData.utcTime = str(utcTimeMs / 1000)
+			avlData.utcTimeMs = str(utcTimeMs)
 			nextByte += 8
 			########################
-			avlData.priority = toInt(self.bytes[nextByte:][:1])
+			avlData.priority = str(toInt(self.bytes[nextByte:][:1]))
 			nextByte += 1
 			#############################
 			avlData.lat = str(int(''.join(self.bytes[nextByte:][:4]), base=16))
@@ -99,10 +100,10 @@ class Decode:
 			avlData.speed = str(toInt(self.bytes[nextByte:][:2]))
 			nextByte += 2
 			#############################
-			avlData.eventID = self.bytes[nextByte:][:1]
+			avlData.eventID = str(self.bytes[nextByte:][:1])
 			nextByte += 1
 			#############################
-			avlData.nTotal = toInt(self.bytes[nextByte:][:1])
+			avlData.nTotal = str(toInt(self.bytes[nextByte:][:1]))
 			nextByte += 1
 
 			for x in range(1,5):
@@ -114,7 +115,7 @@ class Decode:
 				for io in range(1,ioSize+1):
 					element = Element()
 					###
-					element.IOID = toInt(self.bytes[nextByte:][:1])
+					element.ioid = toInt(self.bytes[nextByte:][:1])
 					nextByte += 1
 					###
 					element.value = toInt(self.bytes[nextByte:][:valueSize])
@@ -144,7 +145,7 @@ class Decode:
 			json += f'"ts": "{avl.utcTimeMs}",'
 			json += f'"lat": "{avl.lat}",'
 			json += f'"lng": "{avl.lng}",'
-			json += f'"sp":  "{avl.speed}",'
+			json += f'"sp": "{avl.speed}",'
 			json += f'"ang": "{avl.angle}",'
 			json += f'"sat": "{avl.visSat}",'
 			json += f'"alt": "{avl.visSat}",'
@@ -156,8 +157,8 @@ class Decode:
 				else:
 					json += ','
 				json += '{'
-				json += f'"id": "{str(element.IOID)}",'
-				json += f'"value": "{str(element.value)}"'
+				json += f'"id": "{element.ioid}",'
+				json += f'"value": "{element.value}"'
 				json += '}'
 			json += ']'
 			json += '}'
