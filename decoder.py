@@ -34,7 +34,7 @@ class Decode:
 	noOfData: str = ""
 	avlDataPacketFailed: str = ""
 	avlDataPackets: list=field(default_factory=list)
-	response: str = ""
+	response: str = hex(0)
 
 	def __post_init__(self):
 
@@ -51,14 +51,21 @@ class Decode:
 		self.bytes = [self.data[i:i+2] for i in range(0,len(self.data), 2)]
 
 	def decode(self):
+		# Get the imei length
 		imeiLenght = toInt(self.bytes[:2])
-		self.imei = codecs.decode(''.join(self.bytes[2:][:imeiLenght]),'hex').decode('ascii')
-		
-		##################################
-		#added imeiLenght and zero bytes
-		nextByte = 10 + imeiLenght
 
-		##############
+		# Check if the imei is 15 long
+		if imeiLenght == 15:
+			self.imei = codecs.decode(''.join(self.bytes[2:][:imeiLenght]),'hex').decode('ascii')
+			imeiLenght += 2
+
+		zerobytes = 4 			# Lenght of the zero bytes at the start
+		dataFieldLength = 4		# Dont care about the data field lenght
+
+		# Adding the start byte lenght to start at the top of the packet
+		nextByte = imeiLenght + zerobytes + dataFieldLength
+
+		############## 
 
 		self.codecID = self.bytes[nextByte:][:1][0]
 		nextByte += 1
@@ -70,6 +77,10 @@ class Decode:
 
 		self.noOfData = toInt(self.bytes[nextByte:][:1])
 		nextByte += 1
+
+		if self.noOfData == 0:
+			self.error = "This sending has no packets"
+			return
 
 		#########
 		for x in range(self.noOfData):
@@ -84,17 +95,20 @@ class Decode:
 			avlData.priority = toInt(self.bytes[nextByte:][:1])
 			nextByte += 1
 			#############################
-			avlData.lat = str(int(''.join(self.bytes[nextByte:][:4]), base=16))
+			avlData.lat = hex_to_float(''.join(self.bytes[nextByte:][:4]))
 			nextByte += 4
 			#############################
-			avlData.lng = str(int(''.join(self.bytes[nextByte:][:4]), base=16))
+			avlData.lng = hex_to_float(''.join(self.bytes[nextByte:][:4]))
 			nextByte += 4
 			#############################
 			avlData.altitude = str(toInt(self.bytes[nextByte:][:2]))
 			nextByte += 2
 			#############################
-			avlData.angle = str(toInt(self.bytes[nextByte:][:2]))
+			avlData.angle = toInt(self.bytes[nextByte:][:2])
 			nextByte += 2
+			if(avlData.angle > 360):
+				self.error = "Angle can't be over 360"
+				return
 			#############################
 			avlData.visSat = toInt(self.bytes[nextByte:][:1])
 			nextByte += 1
@@ -127,9 +141,13 @@ class Decode:
 					avlData.elements.append(element)
 			#save the data
 			self.avlDataPackets.append(avlData)
-		endOfData = self.bytes[nextByte:][:1]
+		endOfData = toInt(self.bytes[nextByte:][:1])
 		nextByte += 1
+		if endOfData != self.noOfData:
+			self.error = "The end of data count is different"
+			return
 		crc16 = self.bytes[nextByte:][:4]
+		self.response = hex(self.noOfData)
 
 	def getJson(self):
 		first = True
@@ -147,10 +165,10 @@ class Decode:
 			json += f'"ts": "{avl.utcTimeMs}",'
 			json += f'"lat": "{avl.lat}",'
 			json += f'"lng": "{avl.lng}",'
-			json += f'"sp": "{avl.speed}",'
+			json += f'"alt": "{avl.altitude}",'
 			json += f'"ang": "{avl.angle}",'
 			json += f'"sat": "{avl.visSat}",'
-			json += f'"alt": "{avl.visSat}",'
+			json += f'"sp": "{avl.speed}",'
 			json += '"elements": ['
 			first = True
 			for element in avl.elements:
@@ -169,3 +187,6 @@ class Decode:
 
 def toInt(data):
 	return int(''.join(data), 16)
+
+def hex_to_float(h):
+    return struct.unpack('<f', struct.pack('<I', int(h, 16)))[0]
