@@ -18,7 +18,7 @@ A decoder for the Codec8 packets over TCP sendt from Teltonika devices.
 32160.473578873098 requests pr sec
 i5-7600K CPU @ 3.80GHz  
 
-#### With the json generate
+#### With generating json
 100000 requests in 3.6996185779571533 sec
 27029.81345044974 requests pr sec
 i5-7600K CPU @ 3.80GHz  
