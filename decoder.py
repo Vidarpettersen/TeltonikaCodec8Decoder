@@ -28,7 +28,7 @@ class Decode:
 	data: str
 	json: str = ""
 	error: str = ""
-	bytes: list=field(default_factory=list)
+	bytes: list = field(default_factory=list)
 	imei: str = ""
 	codecID: str = ""
 	noOfData: str = ""
@@ -53,6 +53,8 @@ class Decode:
 	def decode(self):
 		imeiLenght = toInt(self.bytes[:2])
 		self.imei = codecs.decode(''.join(self.bytes[2:][:imeiLenght]),'hex').decode('ascii')
+		
+		##################################
 		#added imeiLenght and zero bytes
 		nextByte = 10 + imeiLenght
 
@@ -79,7 +81,7 @@ class Decode:
 			avlData.utcTimeMs = str(utcTimeMs)
 			nextByte += 8
 			########################
-			avlData.priority = str(toInt(self.bytes[nextByte:][:1]))
+			avlData.priority = toInt(self.bytes[nextByte:][:1])
 			nextByte += 1
 			#############################
 			avlData.lat = str(int(''.join(self.bytes[nextByte:][:4]), base=16))
@@ -94,7 +96,7 @@ class Decode:
 			avlData.angle = str(toInt(self.bytes[nextByte:][:2]))
 			nextByte += 2
 			#############################
-			avlData.visSat = str(toInt(self.bytes[nextByte:][:1]))
+			avlData.visSat = toInt(self.bytes[nextByte:][:1])
 			nextByte += 1
 			#############################
 			avlData.speed = str(toInt(self.bytes[nextByte:][:2]))
