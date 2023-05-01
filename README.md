@@ -1,6 +1,11 @@
 # Teltonika Codec 8 Decoder
 A decoder for the Codec8 packets over TCP sendt from Teltonika devices.
 
+Resource  
+https://wiki.teltonika-gps.com/view/Codec#Codec_8  
+
+
+
 #### Imei hex format
 ```
 000F333536333037303432343431303133
