@@ -1,12 +1,10 @@
 import codecs
 import struct
-from math import ceil
 from dataclasses import dataclass, field
 
 @dataclass(slots=True)
 class AvlData:
 	utcTimeMs: str=""
-	utcTime: str=""
 	priority: str=""
 	lat: str=""
 	lng: str=""
@@ -87,9 +85,7 @@ class Decode:
 			avlData = AvlData()
 
 			############################
-			utcTimeMs = toInt(self.bytes[nextByte:][:8])
-			avlData.utcTime = str(utcTimeMs / 1000)
-			avlData.utcTimeMs = str(utcTimeMs)
+			avlData.utcTimeMs = toInt(self.bytes[nextByte:][:8])
 			nextByte += 8
 			########################
 			avlData.priority = toInt(self.bytes[nextByte:][:1])
@@ -101,7 +97,7 @@ class Decode:
 			avlData.lng = hex_to_float(''.join(self.bytes[nextByte:][:4]))
 			nextByte += 4
 			#############################
-			avlData.altitude = str(toInt(self.bytes[nextByte:][:2]))
+			avlData.altitude = toInt(self.bytes[nextByte:][:2])
 			nextByte += 2
 			#############################
 			avlData.angle = toInt(self.bytes[nextByte:][:2])
@@ -113,13 +109,13 @@ class Decode:
 			avlData.visSat = toInt(self.bytes[nextByte:][:1])
 			nextByte += 1
 			#############################
-			avlData.speed = str(toInt(self.bytes[nextByte:][:2]))
+			avlData.speed = toInt(self.bytes[nextByte:][:2])
 			nextByte += 2
 			#############################
-			avlData.eventID = str(self.bytes[nextByte:][:1])
+			avlData.eventID = self.bytes[nextByte:][:1][0]
 			nextByte += 1
 			#############################
-			avlData.nTotal = str(toInt(self.bytes[nextByte:][:1]))
+			avlData.nTotal = self.bytes[nextByte:][:1][0]
 			nextByte += 1
 
 			for x in range(1,5):
@@ -157,10 +153,11 @@ class Decode:
 		json += f'"dataCount": "{str(self.noOfData)}",'
 		json += '"data":['
 		for avl in self.avlDataPackets:
-			if first:
-				first = False
-			else:
+			if not first:
 				json += ','
+			else:
+				first = False
+				
 			json += '{'
 			json += f'"ts": "{avl.utcTimeMs}",'
 			json += f'"lat": "{avl.lat}",'
@@ -172,10 +169,10 @@ class Decode:
 			json += '"elements": ['
 			first = True
 			for element in avl.elements:
-				if first:
-					first = False
-				else:
+				if not first:
 					json += ','
+				else:
+					first = False
 				json += '{'
 				json += f'"id": "{element.ioid}",'
 				json += f'"value": "{element.value}"'
