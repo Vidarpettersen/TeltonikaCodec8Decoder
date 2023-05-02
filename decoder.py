@@ -147,7 +147,6 @@ class Decode:
 
 	def getJson(self):
 		first = True
-
 		json = '{'
 		json += f'"imei": "{self.imei}",'
 		json += f'"dataCount": "{str(self.noOfData)}",'
@@ -181,6 +180,34 @@ class Decode:
 			json += '}'
 		json = json+']}'
 		return json
+	
+	def toApi(self):
+		jsonArray = []
+		for avl in self.avlDataPackets:
+			json = '{"state": {"reported": {'
+			json += f'"ts": "{avl.utcTimeMs}",'
+			json += f'"lat": "{avl.lat}",'
+			json += f'"lng": "{avl.lng}",'
+			json += f'"alt": "{avl.altitude}",'
+			json += f'"ang": "{avl.angle}",'
+			json += f'"sat": "{avl.visSat}",'
+			json += f'"sp": "{avl.speed}",'
+			json += '"elements": ['
+			first = True
+			for element in avl.elements:
+				if not first:
+					json += ','
+				else:
+					first = False
+				json += '{'
+				json += f'"id": "{element.ioid}",'
+				json += f'"value": "{element.value}"'
+				json += '}'
+			json += ']'
+			json += '}}}'
+			jsonArray.append(json)
+		return jsonArray
+
 
 def toInt(data):
 	return int(''.join(data), 16)
