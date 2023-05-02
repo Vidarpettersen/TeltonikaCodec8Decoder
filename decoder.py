@@ -1,6 +1,8 @@
 import codecs
 import struct
 from dataclasses import dataclass, field
+from lib.FMB import FMB
+from lib.converter import convert
 
 @dataclass(slots=True)
 class AvlData:
@@ -118,7 +120,7 @@ class Decode:
 					element.ioid = toInt(self.data[nextByte:][:2])
 					nextByte += 2
 					###
-					element.value = toInt(self.data[nextByte:][:valueSize*2])
+					element.value = self.data[nextByte:][:valueSize*2]
 					nextByte += valueSize*2
 
 					# Add element to avl data
@@ -172,22 +174,36 @@ class Decode:
 	def toApi(self):
 		jsonArray = []
 		for avl in self.avlDataPackets:
-			json = '{"state": {"reported": {'
-			json += f'"ts": "{avl.utcTimeMs}",'
-			json += f'"latlng": "{avl.lat},{avl.lng}",'
-			json += f'"alt": "{avl.altitude}",'
-			json += f'"ang": "{avl.angle}",'
-			json += f'"sat": "{avl.visSat}",'
-			json += f'"sp": "{avl.speed}",'
+			json = '{"state":{"reported":{'
+			json += f'"ts":"{avl.utcTimeMs}",'
+			json += f'"latlng":"{avl.lat},{avl.lng}",'
+			json += f'"alt":"{avl.altitude}",'
+			json += f'"ang":"{avl.angle}",'
+			json += f'"sat":"{avl.visSat}",'
+			json += f'"sp":"{avl.speed}",'
+			first = True
 			for element in avl.elements:
-				json += f'"{element.ioid}": "{element.value}",'
+				if first: 
+					first = False
+				else:
+					json += ','
+				try:
+					ioid = FMB[str(element.ioid)]['PropertyName']
+					conversion = FMB[str(element.ioid)]['FinalConversion']
+
+					value = str(convert(element.value, conversion))
+				except:
+					ioid = element.ioid
+					value = element.value
+				json += f'"{ioid}":"{value}"'
+				#print(FMB[str(element.ioid)]['PropertyName'])
 			json += '}}}'
 			jsonArray.append(json)
 		return jsonArray
 
 
 def toInt(data):
-	return int(''.join(data), 16)
+	return int(data, 16)
 
 def hex_to_float(h):
     return int(h, 16)/10000000

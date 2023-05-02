@@ -23,7 +23,3 @@ timePassed = lastStopTime - startTime
 requestsPrSec = numberOfTimes / timePassed
 print(f"{numberOfTimes} requests in {timePassed} sec")
 print(f"{requestsPrSec} requests pr sec")
-
-# 100000 requests in 3.2860710620880127 sec
-# 30431.478233601767 requests pr sec
-# i5-7600K CPU @ 3.80GHz  

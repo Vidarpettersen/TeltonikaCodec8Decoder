@@ -1,4 +1,6 @@
 from decoder import Decode
+from lib.FMB import FMB
+from lib.converter import convert
 
 if __name__ == '__main__':
 	imei = "000F333536333037303432343431303133"
@@ -14,7 +16,5 @@ if __name__ == '__main__':
 	except:
 		print("Something went wrong")
 
-	
-	
 # 081e3bdd
 # 289fb715
