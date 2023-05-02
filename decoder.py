@@ -91,10 +91,10 @@ class Decode:
 			avlData.priority = toInt(self.bytes[nextByte:][:1])
 			nextByte += 1
 			#############################
-			avlData.lat = hex_to_float(''.join(self.bytes[nextByte:][:4]))
+			avlData.lng = hex_to_float(''.join(self.bytes[nextByte:][:4]))
 			nextByte += 4
 			#############################
-			avlData.lng = hex_to_float(''.join(self.bytes[nextByte:][:4]))
+			avlData.lat = hex_to_float(''.join(self.bytes[nextByte:][:4]))
 			nextByte += 4
 			#############################
 			avlData.altitude = toInt(self.bytes[nextByte:][:2])
@@ -186,4 +186,4 @@ def toInt(data):
 	return int(''.join(data), 16)
 
 def hex_to_float(h):
-    return struct.unpack('<f', struct.pack('<I', int(h, 16)))[0]
+    return int(h, 16)/10000000
