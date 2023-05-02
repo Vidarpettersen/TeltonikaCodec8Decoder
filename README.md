@@ -26,6 +26,6 @@ Taken from 1'st example
 ```
 
 #### Result
-100000 requests in 3.2860710620880127 sec  
-30431.478233601767 requests pr sec  
+100000 requests in 2.362210750579834 sec  
+42333.22533793979 requests pr sec  
 i5-7600K CPU @ 3.80GHz
