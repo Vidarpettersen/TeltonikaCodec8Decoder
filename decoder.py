@@ -186,8 +186,7 @@ class Decode:
 		for avl in self.avlDataPackets:
 			json = '{"state": {"reported": {'
 			json += f'"ts": "{avl.utcTimeMs}",'
-			json += f'"lat": "{avl.lat}",'
-			json += f'"lng": "{avl.lng}",'
+			json += f'"latlng": "{avl.lat},{avl.lng}",'
 			json += f'"alt": "{avl.altitude}",'
 			json += f'"ang": "{avl.angle}",'
 			json += f'"sat": "{avl.visSat}",'
