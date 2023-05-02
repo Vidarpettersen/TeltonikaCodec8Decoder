@@ -15,7 +15,7 @@ lastStopTime = time.time()
 for x in range(startNumber,endNumber):
 	decode = Decode(data)
 	if not decode.error:
-		json = decode.getJson()
+		json = decode.toApi()
 		lastStopTime = time.time()
 		del decode
 

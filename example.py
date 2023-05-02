@@ -8,7 +8,7 @@ if __name__ == '__main__':
 	try:
 		decode = Decode(data)
 		if not decode.error:
-			print(decode.getJson())
+			print(decode.toApi())
 			print(decode.response)
 		else: print(decode.error)
 	except:
