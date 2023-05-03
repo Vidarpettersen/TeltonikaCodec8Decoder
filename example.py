@@ -10,7 +10,7 @@ if __name__ == '__main__':
 	try:
 		decode = Decode(data)
 		if not decode.error:
-			print(decode.toApi())
+			print(decode.toJson())
 			print(decode.response)
 		else: print(decode.error)
 	except:
