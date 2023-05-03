@@ -10,7 +10,7 @@ https://wiki.teltonika-gps.com/view/Codec#Codec_8
 2. convert to json format with toJson() function
 3. Se example for more info
 
-```
+```python
 decode = Decode(data)
 if not decode.error:
 	print(decode.toJson())
@@ -31,7 +31,7 @@ This is taken from the 3'rd example
 ```
 
 #### Example of return
-```
+```json
 {
 	"state": {
 		"reported": {
