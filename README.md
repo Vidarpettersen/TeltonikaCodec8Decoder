@@ -4,7 +4,17 @@ A decoder for the Codec8 packets over TCP sendt from Teltonika devices.
 Resource  
 https://wiki.teltonika-gps.com/view/Codec#Codec_8  
 
+## How to use
 
+1. Mount a new instance of the Decode class and pass in the sample data.
+2. convert to json format with toJson() function
+3. Se example for more info
+
+```
+decode = Decode(data)
+if not decode.error:
+	print(decode.toJson())
+```
 
 #### Imei hex format
 ```
@@ -16,6 +26,8 @@ This is taken from the 3'rd example
 ```
 000000000000004308020000016B40D57B480100000000000000000000000000000001010101000000000000016B40D5C198010000000000000000000000000000000101010101000000020000252C
 ```
+
+## How to use
 
 #### Example of return
 ```
