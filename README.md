@@ -28,21 +28,36 @@ This is taken from the 3'rd example
 			"ang": "346",
 			"sat": "8",
 			"sp": "0",
-			"Ignition": "1",
-			"Movement": "0",
-			"GSM Signal": "5",
-			"Sleep Mode": "0",
-			"GNSS Status": "1",
-			"GNSS PDOP": "16",
-			"GNSS HDOP": "13",
-			"External Voltage": "19404",
-			"Battery Voltage": "0",
-			"Battery Current": "0",
-			"Active GSM Operator": "178441",
-			"Total Odometer": "12913760"
+			"239": "1",
+			"240": "0",
+			"21": "5",
+			"200": "0",
+			"69": "1",
+			"181": "16",
+			"182": "13",
+			"66": "19404",
+			"67": "0",
+			"68": "0",
+			"241": "178441",
+			"16": "12913760"
 		}
 	}
 }
+```
+
+```
+	"239":	"Ignition"
+	"240": 	"Movement"
+	"21": 	"GSM Signal"
+	"200": 	"Sleep Mode"
+	"69": 	"GNSS Status"
+	"181": 	"GNSS PDOP"
+	"182": 	"GNSS HDOP"
+	"66": 	"External Voltage"
+	"67": 	"Battery Voltage"
+	"68": 	"Battery Current"
+	"241": 	"Active GSM Operator"
+	"16": 	"Total Odometer"
 ```
 
 ## Testing results

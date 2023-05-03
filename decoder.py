@@ -37,7 +37,6 @@ class Decode:
 
 	def __post_init__(self):
 		# Start the decode prossess
-
 		self.decode()
 
 
@@ -147,19 +146,14 @@ class Decode:
 			json += f'"sp":"{avl.speed}",'
 			first = True
 			for element in avl.elements:
-				if first: 
-					first = False
-				else:
-					json += ','
+				False if first else ','
 				try:
-					ioid = FMB[str(element.ioid)]['PropertyName']
 					conversion = FMB[str(element.ioid)]['FinalConversion']
-
 					value = str(convert(element.value, conversion))
 				except:
-					ioid = element.ioid
 					value = element.value
-				json += f'"{ioid}":"{value}"'
+
+				json += f'"{element.ioid}":"{value}"'
 				#print(FMB[str(element.ioid)]['PropertyName'])
 			json += '}}}'
 			jsonArray.append(json)

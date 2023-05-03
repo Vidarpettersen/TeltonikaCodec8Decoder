@@ -16,8 +16,8 @@ for x in range(startNumber,endNumber):
 	decode = Decode(data)
 	if not decode.error:
 		json = decode.toJson()
-		lastStopTime = time.time()
-		del decode
+	del decode
+	lastStopTime = time.time()
 
 timePassed = lastStopTime - startTime
 requestsPrSec = numberOfTimes / timePassed
