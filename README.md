@@ -17,6 +17,34 @@ This is taken from the 3'rd example
 000000000000004308020000016B40D57B480100000000000000000000000000000001010101000000000000016B40D5C198010000000000000000000000000000000101010101000000020000252C
 ```
 
+#### Example of return
+```
+{
+	"state": {
+		"reported": {
+			"ts": "1683023546000",
+			"latlng": "68.1555733,13.6199133",
+			"alt": "38",
+			"ang": "346",
+			"sat": "8",
+			"sp": "0",
+			"Ignition": "1",
+			"Movement": "0",
+			"GSM Signal": "5",
+			"Sleep Mode": "0",
+			"GNSS Status": "1",
+			"GNSS PDOP": "16",
+			"GNSS HDOP": "13",
+			"External Voltage": "19404",
+			"Battery Voltage": "0",
+			"Battery Current": "0",
+			"Active GSM Operator": "178441",
+			"Total Odometer": "12913760"
+		}
+	}
+}
+```
+
 ## Testing results
 
 #### Data used
