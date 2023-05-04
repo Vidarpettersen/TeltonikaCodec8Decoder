@@ -34,6 +34,7 @@ class Decode:
 	response: str = hex(0)
 
 	def __post_init__(self):
+		self.data = self.data.upper()
 		# Start the decode prossess
 		self.decode()
 
@@ -114,7 +115,7 @@ class Decode:
 				for io in range(1,ioSize+1):
 					element = Element()
 					###
-					element.ioid = int(self.data[nextByte:][:2])
+					element.ioid = toInt(self.data[nextByte:][:2])
 					nextByte += 2
 					###
 					element.value = self.data[nextByte:][:valueSize*2]
