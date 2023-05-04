@@ -34,7 +34,6 @@ class Decode:
 	response: str = hex(0)
 
 	def __post_init__(self):
-		self.data = self.data.upper()
 		# Start the decode prossess
 		self.decode()
 
