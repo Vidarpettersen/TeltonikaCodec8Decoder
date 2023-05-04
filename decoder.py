@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
-from TeltonikaCodec8Decoder.lib.FMB import FMB
-from TeltonikaCodec8Decoder.lib.converter import convert
+from lib.FMB import FMB
+from lib.converter import convert
 
 @dataclass(slots=True)
 class AvlData:
