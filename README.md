@@ -13,9 +13,10 @@ https://wiki.teltonika-gps.com/view/Codec#Codec_8
 ```python
 from TektonikaCodec8Decoder.decoder import Decode
 
-decode = Decode(data)
-if not decode.error:
-	print(decode.toJson())
+decoder = Decode()
+decoder.decode(data)
+if not decoder.error:
+	print(decoder.toJson())
 ```
 
 ## Sample data
