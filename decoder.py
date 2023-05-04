@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
-from TeltonikaCodec8Decoder.lib.FMB import FMB
-from TeltonikaCodec8Decoder.lib.converter import convert
+from lib.FMB import FMB
+from lib.converter import convert
 
 @dataclass(slots=True)
 class AvlData:
@@ -114,7 +114,7 @@ class Decode:
 				for io in range(1,ioSize+1):
 					element = Element()
 					###
-					element.ioid = toInt(self.data[nextByte:][:2])
+					element.ioid = toInt(str(self.data[nextByte:][:2]))
 					nextByte += 2
 					###
 					element.value = self.data[nextByte:][:valueSize*2]
