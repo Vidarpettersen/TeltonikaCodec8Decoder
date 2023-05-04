@@ -144,7 +144,7 @@ class Decode:
 			json += f'"sp":"{avl.speed}",'
 			first = True
 			for element in avl.elements:
-				False if first else ','
+				first = False if first else ','
 				try:
 					conversion = FMB[str(element.ioid)]['FinalConversion']
 					value = str(convert(element.value, conversion))
