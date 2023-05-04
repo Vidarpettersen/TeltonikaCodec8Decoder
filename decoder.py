@@ -115,7 +115,7 @@ class Decode:
 				for io in range(1,ioSize+1):
 					element = Element()
 					###
-					element.ioid = toInt(self.data[nextByte:][:2])
+					element.ioid = self.data[nextByte:][:2]
 					nextByte += 2
 					###
 					element.value = self.data[nextByte:][:valueSize*2]
