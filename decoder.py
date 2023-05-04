@@ -5,15 +5,12 @@ from lib.converter import convert
 @dataclass(slots=True)
 class AvlData:
 	utcTimeMs: str=""
-	priority: str=""
 	lat: str=""
 	lng: str=""
 	altitude: str=""
 	angle: str=""
 	visSat: str=""
 	speed: str=""
-	eventID: str=""
-	nTotal: str=""
 	elements: list=field(default_factory=list)
 
 @dataclass(slots=True)
@@ -22,8 +19,7 @@ class Element:
 	value: str=""
 
 @dataclass(slots=True)
-class Decode:
-	data: str
+class Decoder:
 	json: str = ""
 	error: str = ""
 	imei: str = ""
@@ -33,17 +29,12 @@ class Decode:
 	avlDataPackets: list=field(default_factory=list)
 	response: str = hex(0)
 
-	def __post_init__(self):
-		# Start the decode prossess
-		self.decode()
-
-
-	def decode(self):
+	def decode(self, data):
 		# Get the imei length
-		imeiLenght = toInt(self.data[:4])
+		imeiLenght = toInt(data[:4])
 		# Check if the imei is 15 long
 		if imeiLenght == 15 or imeiLenght == 16:
-			self.imei = bytes.fromhex(self.data[4:][:(imeiLenght*2)]).decode('utf-8')
+			self.imei = bytes.fromhex(data[4:][:(imeiLenght*2)]).decode('utf-8')
 			imeiLenght = imeiLenght*2+4
 		zerodata = 8			# Lenght of the zero data at the start
 		dataFieldLength = 8		# Dont care about the data field lenght
@@ -52,7 +43,7 @@ class Decode:
 		nextByte = imeiLenght + zerodata + dataFieldLength
 
 		############## 
-		self.codecID = self.data[nextByte:][:2]
+		self.codecID = data[nextByte:][:2]
 		nextByte += 2
 		if self.codecID != '08':
 			self.error = "This is not codec 8"
@@ -60,7 +51,7 @@ class Decode:
 
 		###########
 
-		self.noOfData = toInt(self.data[nextByte:][:2])
+		self.noOfData = toInt(data[nextByte:][:2])
 		nextByte += 2
 
 		if self.noOfData == 0:
@@ -72,41 +63,41 @@ class Decode:
 			avlData = AvlData()
 
 			############################
-			avlData.utcTimeMs = toInt(self.data[nextByte:][:16])
+			avlData.utcTimeMs = toInt(data[nextByte:][:16])
 			nextByte += 16
 			########################
-			avlData.priority = toInt(self.data[nextByte:][:2])
+			# priority = toInt(data[nextByte:][:2])
 			nextByte += 2
 			#############################
-			avlData.lng = hex_to_float(''.join(self.data[nextByte:][:8]))
+			avlData.lng = hex_to_float(''.join(data[nextByte:][:8]))
 			nextByte += 8
 			#############################
-			avlData.lat = hex_to_float(''.join(self.data[nextByte:][:8]))
+			avlData.lat = hex_to_float(''.join(data[nextByte:][:8]))
 			nextByte += 8
 			#############################
-			avlData.altitude = toInt(self.data[nextByte:][:4])
+			avlData.altitude = toInt(data[nextByte:][:4])
 			nextByte += 4
 			#############################
-			avlData.angle = toInt(self.data[nextByte:][:4])
+			avlData.angle = toInt(data[nextByte:][:4])
 			nextByte += 4
 			if(avlData.angle > 360):
 				self.error = "Angle can't be over 360"
 				return
 			#############################
-			avlData.visSat = toInt(self.data[nextByte:][:2])
+			avlData.visSat = toInt(data[nextByte:][:2])
 			nextByte += 2
 			#############################
-			avlData.speed = toInt(self.data[nextByte:][:4])
+			avlData.speed = toInt(data[nextByte:][:4])
 			nextByte += 4
 			#############################
-			avlData.eventID = self.data[nextByte:][:2]
+			# eventID = data[nextByte:][:2]
 			nextByte += 2
 			#############################
-			avlData.nTotal = self.data[nextByte:][:2]
+			# nTotal = data[nextByte:][:2]
 			nextByte += 2
 
 			for x in range(1,5):
-				ioSize = toInt(self.data[nextByte:][:2])
+				ioSize = toInt(data[nextByte:][:2])
 				nextByte += 2
 				if x == 1: valueSize = 1
 				if x != 1: valueSize = pow(2, (x-1))
@@ -114,22 +105,22 @@ class Decode:
 				for io in range(1,ioSize+1):
 					element = Element()
 					###
-					element.ioid = toInt(self.data[nextByte:][:2])
+					element.ioid = toInt(data[nextByte:][:2])
 					nextByte += 2
 					###
-					element.value = self.data[nextByte:][:valueSize*2]
+					element.value = data[nextByte:][:valueSize*2]
 					nextByte += valueSize*2
 
 					# Add element to avl data
 					avlData.elements.append(element)
 			#save the data
 			self.avlDataPackets.append(avlData)
-		endOfData = toInt(self.data[nextByte:][:2])
+		endOfData = toInt(data[nextByte:][:2])
 		nextByte += 2
 		if endOfData != self.noOfData:
 			self.error = "The end of data count is different"
 			return
-		crc16 = self.data[nextByte:][:8]
+		# crc16 = data[nextByte:][:8]
 		self.response = hex(self.noOfData)
 	
 	def toJson(self):

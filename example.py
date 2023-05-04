@@ -1,4 +1,4 @@
-from decoder import Decode
+from decoder import Decoder
 from lib.FMB import FMB
 from lib.converter import convert
 
@@ -8,11 +8,12 @@ if __name__ == '__main__':
 	#data = imei + data
 
 	try:
-		decode = Decode(data)
-		if not decode.error:
-			print(decode.toJson())
-			print(decode.response)
-		else: print(decode.error)
+		decoder = Decoder()
+		decoder.decode(data)
+		if not decoder.error:
+			print(decoder.toJson())
+			print(decoder.response)
+		else: print(decoder.error)
 	except:
 		print("Something went wrong")
 

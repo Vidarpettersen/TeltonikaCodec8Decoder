@@ -1,4 +1,4 @@
-from decoder import Decode
+from decoder import Decoder
 import time
 
 imei = "000F333536333037303432343431303133"
@@ -13,10 +13,11 @@ startTime = time.time()
 lastStopTime = time.time()
 
 for x in range(startNumber,endNumber):
-	decode = Decode(data)
-	if not decode.error:
-		json = decode.toJson()
-	del decode
+	decoder = Decoder()
+	decoder.decode(data)
+	if not decoder.error:
+		json = decoder.toJson()
+	del decoder
 	lastStopTime = time.time()
 
 timePassed = lastStopTime - startTime
