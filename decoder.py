@@ -45,8 +45,8 @@ class Decoder:
 		############## 
 		self.codecID = data[nextByte:][:2]
 		nextByte += 2
-		if self.codecID != '08':
-			self.error = "This is not codec 8"
+		if self.codecID != '08' and self.codecID != '8e':
+			self.error = "This is not codec 8 or 8 extended"
 			return
 
 		###########
@@ -83,36 +83,68 @@ class Decoder:
 			if(avlData.angle > 360):
 				self.error = "Angle can't be over 360"
 				return
+			
 			#############################
 			avlData.visSat = toInt(data[nextByte:][:2])
 			nextByte += 2
 			#############################
 			avlData.speed = toInt(data[nextByte:][:4])
 			nextByte += 4
-			#############################
-			# eventID = data[nextByte:][:2]
-			nextByte += 2
-			#############################
-			# nTotal = data[nextByte:][:2]
-			nextByte += 2
 
-			for x in range(1,5):
-				ioSize = toInt(data[nextByte:][:2])
+			if self.codecID == '08':
+				#############################
+				# eventID = data[nextByte:][:2]
 				nextByte += 2
-				if x == 1: valueSize = 1
-				if x != 1: valueSize = pow(2, (x-1))
+				#############################
+				# nTotal = data[nextByte:][:2]
+				nextByte += 2
 
-				for io in range(1,ioSize+1):
-					element = Element()
-					###
-					element.ioid = toInt(data[nextByte:][:2])
+				for x in range(1,5):
+					ioSize = toInt(data[nextByte:][:2])
 					nextByte += 2
-					###
-					element.value = data[nextByte:][:valueSize*2]
-					nextByte += valueSize*2
+					if x == 1: valueSize = 1
+					if x != 1: valueSize = pow(2, (x-1))
 
-					# Add element to avl data
-					avlData.elements.append(element)
+					for io in range(1,ioSize+1):
+						element = Element()
+						###
+						element.ioid = toInt(data[nextByte:][:2])
+						nextByte += 2
+						###
+						element.value = data[nextByte:][:valueSize*2]
+						nextByte += valueSize*2
+
+						# Add element to avl data
+						avlData.elements.append(element)
+			else:
+				#############################
+				# eventID = data[nextByte:][:2]
+				nextByte += 4
+				#############################
+				# nTotal = data[nextByte:][:2]
+				nextByte += 4
+
+				for x in range(1,5):
+					ioSize = toInt(data[nextByte:][:4])
+					nextByte += 4
+					if x == 1: valueSize = 1
+					if x != 1: valueSize = pow(2, (x-1))
+
+					for io in range(1,ioSize+1):
+						element = Element()
+						###
+						element.ioid = toInt(data[nextByte:][:4])
+						nextByte += 4
+						###
+						element.value = data[nextByte:][:valueSize*2]
+						nextByte += valueSize*2
+						print(ioSize)
+						print(element)
+						# Add element to avl data
+						avlData.elements.append(element)
+
+				nxOfXbyte = data[nextByte:][:4]
+				nextByte += 4
 			#save the data
 			self.avlDataPackets.append(avlData)
 		endOfData = toInt(data[nextByte:][:2])
