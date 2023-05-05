@@ -143,7 +143,6 @@ class Decoder:
 
 				nxOfXbyte = toInt(data[nextByte:][:4])
 				nextByte += 4
-				print(data[nextByte:])
 				for x in range(nxOfXbyte):
 					element = Element()
 					element.ioid = toInt(data[nextByte:][:4])
