@@ -141,8 +141,18 @@ class Decoder:
 						# Add element to avl data
 						avlData.elements.append(element)
 
-				nxOfXbyte = data[nextByte:][:4]
+				nxOfXbyte = toInt(data[nextByte:][:4])
 				nextByte += 4
+				print(data[nextByte:])
+				for x in range(nxOfXbyte):
+					element = Element()
+					element.ioid = toInt(data[nextByte:][:4])
+					nextByte += 4
+					nthLenght = toInt(data[nextByte:][:4])
+					nextByte += 4
+					element.value = data[nextByte:][:nthLenght*2]
+					nextByte += nthLenght*2
+					avlData.elements.append(element)
 			#save the data
 			self.avlDataPackets.append(avlData)
 		endOfData = toInt(data[nextByte:][:2])
@@ -170,12 +180,14 @@ class Decoder:
 				else: 
 					json += ','
 				try:
+					io = FMB[str(element.ioid)]['PropertyName']
 					conversion = FMB[str(element.ioid)]['FinalConversion']
 					value = str(convert(element.value, conversion))
 				except:
+					io = element.ioid
 					value = element.value
 
-				json += f'"{element.ioid}":"{value}"'
+				json += f'"{io}":"{value}"'
 				#print(FMB[str(element.ioid)]['PropertyName'])
 			json += '}}}'
 			jsonArray.append(json)
