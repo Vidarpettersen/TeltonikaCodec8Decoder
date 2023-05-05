@@ -138,8 +138,6 @@ class Decoder:
 						###
 						element.value = data[nextByte:][:valueSize*2]
 						nextByte += valueSize*2
-						print(ioSize)
-						print(element)
 						# Add element to avl data
 						avlData.elements.append(element)
 
