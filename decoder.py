@@ -30,6 +30,7 @@ class Decoder:
 	response: str = hex(0)
 
 	def decode(self, data):
+		data = data.upper()
 		# Get the imei length
 		imeiLenght = toInt(data[:4])
 		# Check if the imei is 15 long
@@ -45,7 +46,7 @@ class Decoder:
 		############## 
 		self.codecID = data[nextByte:][:2]
 		nextByte += 2
-		if self.codecID != '08' and self.codecID != '8e':
+		if self.codecID != '08' and self.codecID != '8E':
 			self.error = "This is not codec 8 or 8 extended"
 			return
 
@@ -179,7 +180,7 @@ class Decoder:
 				else: 
 					json += ','
 				try:
-					io = FMB[str(element.ioid)]['PropertyName']
+					io = element.ioid
 					conversion = FMB[str(element.ioid)]['FinalConversion']
 					value = str(convert(element.value, conversion))
 				except:
